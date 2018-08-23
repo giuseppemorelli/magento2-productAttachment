@@ -53,5 +53,11 @@ interface ProductattachInterface
     public function DeleteAttachment(
         $int
     );
-
+    
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Prince\Productattach\Api\Data\ProductAttachTableSearchResultsInterface
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

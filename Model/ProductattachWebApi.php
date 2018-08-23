@@ -33,9 +33,13 @@ use Prince\Productattach\Api\Productattach;
 use Prince\Productattach\Api\Data;
 use Magento\Framework\Exception\NotFoundException;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 
 class ProductattachWebApi implements \Prince\Productattach\Api\ProductattachInterface
 {
+    const CUSTOM_PATH = "custom/upload";
 
     /**
      * @var \Prince\Productattach\Model\ResourceModel\Productattach
@@ -63,6 +67,16 @@ class ProductattachWebApi implements \Prince\Productattach\Api\ProductattachInte
     protected $_dataHelper;
 
     /**
+     * @var SearchResultFactory
+     */
+    protected $searchResultFactory = null;
+
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param Productattach $productAttach
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Data\ProductattachTableInterface $productattachTableInterface
@@ -73,7 +87,9 @@ class ProductattachWebApi implements \Prince\Productattach\Api\ProductattachInte
         \Prince\Productattach\Model\ProductattachTableFactory $productattachCollectionFactory,
         \Prince\Productattach\Api\Data\ProductattachTableInterface $productattachTableInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        \Prince\Productattach\Helper\Data $dataHelper
+        \Prince\Productattach\Helper\Data $dataHelper,
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     )
     {
         $this->_productattach = $productattach;
@@ -81,6 +97,9 @@ class ProductattachWebApi implements \Prince\Productattach\Api\ProductattachInte
         $this->_productattachTableInterface = $productattachTableInterface;
         $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->_dataHelper = $dataHelper;
+        $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
     }
 
     /**
@@ -176,5 +195,19 @@ class ProductattachWebApi implements \Prince\Productattach\Api\ProductattachInte
         return true;
     }
 
-    const CUSTOM_PATH = "custom/upload";
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Prince\Productattach\Api\Data\ProductAttachTableSearchResultsInterface
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    {
+        /** @var \Prince\Productattach\Api\Data\ProductAttachTableSearchResultsInterface $searchResult */
+        $searchResult = $this->searchResultFactory->create();
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
+
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        return $searchResult;
+    }
 }
