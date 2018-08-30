@@ -168,7 +168,7 @@ class ProductattachTable extends
     /**
      * @return string
      */
-    public function getProducts()
+    public function getProducts(\Prince\Productattach\Model\Productattach $object)
     {
         return $this->getData("products");
     }

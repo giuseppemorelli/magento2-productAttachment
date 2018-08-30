@@ -19,17 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html
  *
- * @category MagePrince
- * @package Prince_Productattach
+ * @category  MagePrince
+ * @package   Prince_Productattach
  * @copyright Copyright (c) 2018 MagePrince
- * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
- * @author MagePrince
+ * @license   http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author    MagePrince
  */
 
 namespace Prince\Productattach\Model\ResourceModel\Productattach;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection as AbstractCollection;
+use Prince\Productattach\Api\Data\ProductAttachTableSearchResultsInterface;
+
+class Collection extends AbstractCollection implements ProductAttachTableSearchResultsInterface
 {
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    protected $searchCriteria;
 
     protected $_idFieldName = 'productattach_id';
 
@@ -44,5 +51,71 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'Prince\Productattach\Model\Productattach',
             'Prince\Productattach\Model\ResourceModel\Productattach'
         );
+    }
+
+    /**
+     *  Set items list.
+     *
+     * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
+     *
+     * @return $this|ProductAttachTableSearchResultsInterface
+     * @throws \Exception
+     */
+    public function setItems(array $items = null)
+    {
+        if (!$items) {
+            return $this;
+        }
+        foreach ($items as $item) {
+            $this->addItem($item);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get search criteria.
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    public function getSearchCriteria()
+    {
+        return $this->searchCriteria;
+    }
+
+    /**
+     * Set search criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    {
+        $this->searchCriteria = $searchCriteria;
+
+        return $this;
+    }
+
+    /**
+     * Get total count.
+     *
+     * @return int
+     */
+    public function getTotalCount()
+    {
+        return $this->getSize();
+    }
+
+    /**
+     * Set total count.
+     *
+     * @param int $totalCount
+     *
+     * @return $this
+     */
+    public function setTotalCount($totalCount)
+    {
+        return $this;
     }
 }

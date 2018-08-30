@@ -74,6 +74,11 @@ class Productattach extends \Magento\Framework\Model\AbstractModel
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
+    /**
+     * @param Productattach $object
+     *
+     * @return array
+     */
     public function getProducts(\Prince\Productattach\Model\Productattach $object)
     {
         $tbl = $this->getResource()->getTable("prince_productattach");

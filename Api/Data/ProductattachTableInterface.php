@@ -28,19 +28,20 @@
  
 namespace Prince\Productattach\Api\Data;
 use Magento\Framework\Api;
+
 interface ProductattachTableInterface
 {
 
     /**
      * @return string mixed
      */
-    public function getProductAttachId();
+    public function getProductattachId();
 
     /**
      * @param string $val
      * @return void
      */
-    public function setProductAttachId($val);
+    public function setProductattachId($val);
 
     /**
      * @return string
@@ -109,9 +110,11 @@ interface ProductattachTableInterface
     public function setCustomerGroup($val);
 
     /**
-     * @return string mixed
+     * @param \Prince\Productattach\Model\Productattach $object
+     *
+     * @return mixed
      */
-    public function getProducts();
+    public function getProducts(\Prince\Productattach\Model\Productattach $object);
 
     /**
      * @param string $val

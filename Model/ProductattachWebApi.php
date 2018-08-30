@@ -32,8 +32,7 @@ use Prince\Productattach\Api\Api;
 use Prince\Productattach\Api\Productattach;
 use Prince\Productattach\Api\Data;
 use Magento\Framework\Exception\NotFoundException;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Prince\Productattach\Api\Data\ProductAttachTableSearchResultsInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 
